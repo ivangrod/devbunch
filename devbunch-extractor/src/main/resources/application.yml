@@ -1,0 +1,6 @@
+spring.kafka:
+  bootstrap-servers: 0.0.0.0:9092
+  
+spring:
+  datasource:
+    initialization-mode: always
