@@ -1,0 +1,13 @@
+version: '2'
+services:
+
+  #############
+  # Jenkins
+  #############
+  jenkins:
+    image: ivangutrod/jenkins-bundledev:latest
+    ports:
+      - "8080:8080"
+    volumes:
+      - /opt/jenkins_home:/jenkins
+      - /var/run/docker.sock:/var/run/docker.sock
