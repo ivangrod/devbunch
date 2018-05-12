@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class DevbunchGraphModelApplication {
+public class GraphModelApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DevbunchGraphModelApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(GraphModelApplication.class, args);
+  }
 }
