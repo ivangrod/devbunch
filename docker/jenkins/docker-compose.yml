@@ -5,9 +5,27 @@ services:
   # Jenkins
   #############
   jenkins:
-    image: ivangutrod/jenkins-bundledev:latest
+    build: ./
     ports:
       - "8080:8080"
-    volumes:
-      - /opt/jenkins_home:/jenkins
-      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - JENKINS_USER=admin
+      - JENKINS_PASS=admin
+#    links:
+#      - sonarqube
+#      - artifactory
+
+
+#  sonarqube:
+#    image: sonarqube:alpine
+#    ports:
+#      - "9000:9000"
+#      - "9092:9092"
+#
+#  artifactory:
+#    image: docker.bintray.io/jfrog/artifactory-oss:5.11.0
+#    container_name: artifactory
+#    ports:
+#     - 8081:8081
+
+
