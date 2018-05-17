@@ -18,6 +18,11 @@ pipeline {
                   // Sending message through slack
             }
        }
+       stage('checkout') {
+            steps {
+                git(url: 'https://github.com/david-romero/devbunch', branch: 'feature/addPipeline', credentialsId: 'github-credentials', poll: true, changelog: true)
+            }
+       }
        stage ('Build') { //Compile stage
             steps {
                  bat "mvn -T 4 -B --batch-mode -V -U clean package"
