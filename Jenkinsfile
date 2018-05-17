@@ -1,8 +1,8 @@
 pipeline {
-     agent any    //Docker agent. In the future, we will work with docker
-     tools { //Jenkins installed tools
+    agent any    //Docker agent. In the future, we will work with docker
+    tools { //Jenkins installed tools
         maven 'maven3' //Maven tool defined in jenkins configuration
-        jdk 'JDK8' //Java tool defined in jenkin configuration
+        jdk 'jdk8' //Java tool defined in jenkin configuration
     }
     options {
         //If after 3 days the pipeline does not finish, please abort
@@ -16,6 +16,7 @@ pipeline {
        stage ('Initialize') { //Send message to slack at the beginning
              steps {
                   // Sending message through slack
+                  sh 'mvn --version'
             }
        }
        stage('checkout') {
@@ -25,10 +26,30 @@ pipeline {
        }
        stage ('Build') { //Compile stage
             steps {
-                 bat "mvn -T 4 -B --batch-mode -V -U clean package"
+                 sh "mvn -T 4 -B --batch-mode -V -U clean package"
             }
        }
-       stage ('Test') {
+    } //End of stages
+    //Post-workflow actions.
+    //The pipeline sends messages with the result of the execution
+    post {
+      success {
+           // Sending message through slack 
+           sh 'mvn --version'
+      }
+      failure {
+           // Sending message through slack
+           sh 'mvn --version'
+      }
+      unstable {
+           // Sending message through slack'
+           sh 'mvn --version'
+      }
+    }
+  }
+
+/*
+stage ('Test') {
             //Tests stage. We use parrallel mode.
             steps {
                  parallel 'Integration & Unit Tests': {
@@ -101,18 +122,4 @@ pipeline {
                 deleteDir()
            }
       }
-    } //End of stages
-    //Post-workflow actions.
-    //The pipeline sends messages with the result of the execution
-    post {
-      success {
-           // Sending message through slack 
-      }
-      failure {
-           // Sending message through slack
-      }
-      unstable {
-           // Sending message through slack'
-      }
-    }
-   }
+*/
