@@ -11,6 +11,7 @@ pipeline {
     environment {
         //Project name
         APP_NAME = 'devbunch'
+        CURRENT_BRACH = '$BRANCH_NAME'
     }
     stages { //Stages definition
        stage ('Initialize') { //Send message to slack at the beginning
@@ -21,7 +22,7 @@ pipeline {
        }
        stage('checkout') {
             steps {
-                git(url: 'https://github.com/david-romero/devbunch', branch: 'feature/addPipeline', credentialsId: 'github-credentials', poll: true, changelog: true)
+                git(url: 'https://github.com/david-romero/devbunch', poll: true, changelog: true)
             }
        }
        stage ('Build') { //Compile stage
@@ -58,6 +59,11 @@ pipeline {
       }
       stage ('Deploy to Pre-production environment') {
            steps {
+                if (env.BRANCH_NAME == 'master') {
+                  echo 'I only execute on the master branch'
+                } else {
+                  echo 'I execute elsewhere ' + env.BRANCH_NAME
+                }
                 sh "mvn --version"
            }
       }
@@ -75,7 +81,12 @@ pipeline {
            steps {
                //Tagging from trunk to tag
                echo "Tagging the release Candidate";
-               sh "mvn -B --batch-mode scm:tag -Dmaven.test.skip=true"
+               when {
+                branch 'master'
+               }
+               steps {
+                  echo 'Deploying'
+               }
           }
       }
       stage ('Deploy to Production environment') {
