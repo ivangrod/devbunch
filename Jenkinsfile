@@ -58,14 +58,12 @@ pipeline {
           }
       }
       stage ('Deploy to Pre-production environment') {
-           steps {
-                if (env.BRANCH_NAME == 'master') {
-                  echo 'I only execute on the master branch'
-                } else {
-                  echo 'I execute elsewhere ' + env.BRANCH_NAME
-                }
-                sh "mvn --version"
-           }
+              if (env.BRANCH_NAME == 'master') {
+                echo 'I only execute on the master branch'
+              } else {
+                echo 'I execute elsewhere ' + env.BRANCH_NAME
+              }
+              sh "mvn --version"
       }
       stage ('Confirmation') {
            //In this stage, pipeline wait until user confirm next stage.
