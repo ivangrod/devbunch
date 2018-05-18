@@ -28,7 +28,7 @@ pipeline {
        }
        stage('checkout') {
             when {
-                expression { return '$BRANCH_NAME'.startsWith('PR-') }
+                expression { return env.BRANCH_NAME.startsWith('PR-') }
             }
             steps {
                 git(url: 'https://github.com/david-romero/devbunch', branch: 'refs/pull/*/head')
@@ -36,10 +36,10 @@ pipeline {
        }
        stage('Checkout PR') {
             when {
-                expression { return !'$BRANCH_NAME'.startsWith('PR-') }
+                expression { return !env.BRANCH_NAME.startsWith('PR-') }
             }
             steps {
-                  echo 'Checkout $BRANCH_NAME'
+                  echo 'Checkout ' + env.BRANCH_NAME
                   git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME')
             }
        }
