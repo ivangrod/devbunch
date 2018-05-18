@@ -31,7 +31,7 @@ pipeline {
                 expression { return env.BRANCH_NAME.startsWith('PR-') }
             }
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '${sha1}']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', refspec: '+refs/pull/*:refs/remotes/origin/pr/*', url: 'https://github.com/david-romero/devbunch']]])
+                checkout([$class: 'GitSCM', branches: [[name: '${sha1}']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', refspec: '+refs/heads/pr/*:refs/remotes/origin/pr/*', url: 'https://github.com/david-romero/devbunch']]])
             }
        }
        stage('Checkout') {
