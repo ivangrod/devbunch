@@ -26,15 +26,15 @@ pipeline {
                 deleteDir()
            }
        }
-       stage('checkout') {
+       stage('Checkout PR') {
             when {
                 expression { return env.BRANCH_NAME.startsWith('PR-') }
             }
             steps {
-                git(url: 'https://github.com/david-romero/devbunch', branch: 'refs/pull/*/head')
+                checkout([$class: 'GitSCM', branches: [[name: '${sha1}']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'github', refspec: '+refs/pull/*:refs/remotes/origin/pr/*', url: 'https://github.com/david-romero/devbunch']]])
             }
        }
-       stage('Checkout PR') {
+       stage('Checkout') {
             when {
                 expression { return !env.BRANCH_NAME.startsWith('PR-') }
             }
