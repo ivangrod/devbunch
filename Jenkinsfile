@@ -42,13 +42,9 @@ pipeline {
        stage ('QA') {
            //QA stage. Parallel mode with Sonar, Coverage and OWASP
            steps {
-                parallel 'Sonarqube Analysis': {
+               parallel 'Sonarqube Analysis': {
                     sh "mvn -B --batch-mode -U clean verify"
                     sh "mvn --version"
-               }, 'Check code coverage' : {
-                    //Check coverage
-                    //If coverage is under 80% the pipeline fails.
-                    sh "mvn -B --batch-mode -U clean verify"
                }, 'OWASP Analysis' : {
                     sh "mvn --version"
                }
@@ -66,7 +62,7 @@ pipeline {
            }
       }
       stage ('Confirmation') {
-          //In this stage, pipeline wait until user confirm next stage.
+           //In this stage, pipeline wait until user confirm next stage.
            //It sends slack messages
            steps {
                 /*slackSend channel: '@boss',color: '#00FF00', message: '\u00BFDo you want to deploy to production environment?. \n Link: ${BLUE_OCEAN_URL}' , teamDomain: 'my-company', token: 'XXXXXXXXXXX'*/
@@ -79,7 +75,7 @@ pipeline {
            steps {
                //Tagging from trunk to tag
                echo "Tagging the release Candidate";
-               sh "mvn -B --batch-mode -V -U -e scm:tag -Dmaven.test.skip=true"
+               sh "mvn -B --batch-mode scm:tag -Dmaven.test.skip=true"
           }
       }
       stage ('Deploy to Production environment') {
