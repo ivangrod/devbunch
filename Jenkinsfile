@@ -63,8 +63,16 @@ pipeline {
                }
           }
       }
+      stage ('Install') {
+            when {
+              branch 'develop'
+            }
+            steps {
+                 sh "mvn clean install"
+           }
+      }
       stage ('Checking PR commits') {
-          when {
+            when {
                 expression { BRANCH_NAME != 'master' }
             }
             steps {
@@ -72,6 +80,9 @@ pipeline {
             }
       }
       stage ('Confirmation') {
+           when {
+            branch 'master'
+           }
            //In this stage, pipeline wait until user confirm next stage.
            //It sends slack messages
            steps {
@@ -91,6 +102,9 @@ pipeline {
            }
       }
       stage ('Deploy to Production environment') {
+           when {
+            branch 'master'
+           }
            //We deploy in parrallel mode during 6 times. 
            steps {
                 parallel 'Server 1': {
