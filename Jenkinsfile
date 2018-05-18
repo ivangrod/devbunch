@@ -20,6 +20,12 @@ pipeline {
                   sh 'mvn --version'
             }
        }
+       stage ('CleanUp') {
+           //The pipeline remove all temporal files.
+           steps {
+                deleteDir()
+           }
+      }
        stage('checkout') {
             steps {
                 git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME', poll: true, changelog: true)
@@ -89,19 +95,13 @@ pipeline {
            steps {
                 parallel 'Server 1': {
                     retry(6) {
-                        bat "mvn --version"
+                        sh "mvn --version"
                     }
                 }, 'Server 2' : {
                     retry(6) {
-                        bat "mvn --version"
+                        sh "mvn --version"
                     }
                 }
-           }
-      }
-      stage ('CleanUp') {
-           //The pipeline remove all temporal files.
-           steps {
-                deleteDir()
            }
       }
     } //End of stages
