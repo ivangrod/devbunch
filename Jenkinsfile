@@ -43,14 +43,14 @@ pipeline {
            //QA stage. Parallel mode with Sonar, Coverage and OWASP
            steps {
                 parallel 'Sonarqube Analysis': {
-                    bat "mvn -B --batch-mode -U clean verify"
-                    bat "mvn -B --batch-mode -U sonar:sonar"
+                    sh "mvn -B --batch-mode -U clean verify"
+                    sh "mvn --version"
                }, 'Check code coverage' : {
                     //Check coverage
                     //If coverage is under 80% the pipeline fails.
-                    bat "mvn -B --batch-mode -U verify"
+                    sh "mvn -B --batch-mode -U verify"
                }, 'OWASP Analysis' : {
-                    bat "mvn -B -X --batch-mode -V -U -e dependency-check:check"
+                    sh "mvn --version"
                }
           }
           //We store tests reports.
@@ -59,6 +59,48 @@ pipeline {
                     junit 'target/surefire-reports/**/*.xml' 
                }
           }
+      }
+      stage ('Deploy to Pre-production environment') {
+           steps {
+                sh "mvn --version"
+           }
+      }
+      stage ('Confirmation') {
+          //In this stage, pipeline wait until user confirm next stage.
+           //It sends slack messages
+           steps {
+                /*slackSend channel: '@boss',color: '#00FF00', message: '\u00BFDo you want to deploy to production environment?. \n Link: ${BLUE_OCEAN_URL}' , teamDomain: 'my-company', token: 'XXXXXXXXXXX'*/
+                timeout(time: 72, unit: 'HOURS') {
+                    input 'Should the project ' + APP_NAME + ' be deployed to production environment\u003F'
+                }
+           }
+      }
+      stage ('Tagging the release candidate') {
+           steps {
+               //Tagging from trunk to tag
+               echo "Tagging the release Candidate";
+               sh "mvn -B --batch-mode -V -U -e scm:tag -Dmaven.test.skip=true"
+          }
+      }
+      stage ('Deploy to Production environment') {
+           //We deploy in parrallel mode during 6 times. 
+           steps {
+                parallel 'Server 1': {
+                    retry(6) {
+                        bat "mvn --version"
+                    }
+                }, 'Server 2' : {
+                    retry(6) {
+                        bat "mvn --version"
+                    }
+                }
+           }
+      }
+      stage ('CleanUp') {
+           //The pipeline remove all temporal files.
+           steps {
+                deleteDir()
+           }
       }
     } //End of stages
     //Post-workflow actions.
