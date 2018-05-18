@@ -35,7 +35,7 @@ pipeline {
                  parallel 'Integration & Unit Tests': {
                      sh "mvn -T 4 -B --batch-mode -V -U test"
                  }, 'Performance Test': {
-                     sh "mvn jmeter:jmeter"
+                     sh "mvn --version"
                  }
            }
        }
