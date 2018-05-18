@@ -52,7 +52,7 @@ pipeline {
           //We store tests reports.
           post {
                success {
-                    junit './**/target/surefire-reports/**/*.xml' 
+                    junit 'collector/target/surefire-reports/**/*.xml' 
                }
           }
       }
