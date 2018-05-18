@@ -27,7 +27,9 @@ pipeline {
            }
       }
        stage('checkout') {
-            steps {
+            if (env.CHANGE_ID) { //Github set this env when the bran is a pr
+                git(url: 'https://github.com/david-romero/devbunch', branch: 'refs/pull/*/head')
+            }else {
                 git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME')
             }
        }
