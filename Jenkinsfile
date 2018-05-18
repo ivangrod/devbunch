@@ -25,6 +25,11 @@ pipeline {
            steps {
                 deleteDir()
            }
+      }
+       stage('checkout') {
+            steps {
+                git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME')
+            }
        }
        stage ('Build') { //Compile stage
             steps {
