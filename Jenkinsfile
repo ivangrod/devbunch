@@ -26,9 +26,40 @@ pipeline {
        }
        stage ('Build') { //Compile stage
             steps {
-                 sh "mvn -T 4 -B --batch-mode -V -U clean package"
+                 sh "mvn -T 4 -B --batch-mode -V -U clean compile"
             }
        }
+       stage ('Test') {
+            //Tests stage. We use parrallel mode.
+            steps {
+                 parallel 'Integration & Unit Tests': {
+                     sh "mvn -T 4 -B --batch-mode -V -U test"
+                 }, 'Performance Test': {
+                     sh "mvn jmeter:jmeter"
+                 }
+           }
+       }
+       stage ('QA') {
+           //QA stage. Parallel mode with Sonar, Coverage and OWASP
+           steps {
+                parallel 'Sonarqube Analysis': {
+                    bat "mvn -B --batch-mode -U clean verify"
+                    bat "mvn -B --batch-mode -U sonar:sonar"
+               }, 'Check code coverage' : {
+                    //Check coverage
+                    //If coverage is under 80% the pipeline fails.
+                    bat "mvn -B --batch-mode -U verify"
+               }, 'OWASP Analysis' : {
+                    bat "mvn -B -X --batch-mode -V -U -e dependency-check:check"
+               }
+          }
+          //We store tests reports.
+          post {
+               success {
+                    junit 'target/surefire-reports/**/*.xml' 
+               }
+          }
+      }
     } //End of stages
     //Post-workflow actions.
     //The pipeline sends messages with the result of the execution
