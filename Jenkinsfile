@@ -48,7 +48,7 @@ pipeline {
                }, 'Check code coverage' : {
                     //Check coverage
                     //If coverage is under 80% the pipeline fails.
-                    sh "mvn -B --batch-mode -U verify"
+                    sh "mvn -B --batch-mode -U clean verify"
                }, 'OWASP Analysis' : {
                     sh "mvn --version"
                }
