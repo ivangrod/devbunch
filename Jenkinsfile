@@ -57,13 +57,13 @@ pipeline {
                }
           }
       }
-      stage ('Deploy to Pre-production environment') {
-              if (env.BRANCH_NAME == 'master') {
-                echo 'I only execute on the master branch'
-              } else {
-                echo 'I execute elsewhere ' + env.BRANCH_NAME
-              }
-              sh "mvn --version"
+      stage ('Checking PR commits') {
+          when {
+                expression { BRANCH_NAME != 'master' }
+            }
+            steps {
+                echo 'Deploying' + env.BRANCH_NAME
+            }
       }
       stage ('Confirmation') {
            //In this stage, pipeline wait until user confirm next stage.
@@ -76,16 +76,13 @@ pipeline {
            }
       }
       stage ('Tagging the release candidate') {
+           when {
+            branch 'master'
+           }
            steps {
-               //Tagging from trunk to tag
-               echo "Tagging the release Candidate";
-               when {
-                branch 'master'
-               }
-               steps {
-                  echo 'Deploying'
-               }
-          }
+              //Tagging from master to tag
+              echo "Tagging the release Candidate";
+           }
       }
       stage ('Deploy to Production environment') {
            //We deploy in parrallel mode during 6 times. 
