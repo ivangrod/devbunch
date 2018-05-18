@@ -25,12 +25,21 @@ pipeline {
            steps {
                 deleteDir()
            }
-      }
+       }
        stage('checkout') {
-            if (env.CHANGE_ID) { //Github set this env when the bran is a pr
+            when {
+                expression { return '$BRANCH_NAME'.startsWith('PR-') }
+            }
+            steps {
                 git(url: 'https://github.com/david-romero/devbunch', branch: 'refs/pull/*/head')
-            }else {
-                git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME')
+            }
+       }
+       stage('Checkout PR') {
+            when {
+                expression { return !'$BRANCH_NAME'.startsWith('PR-') }
+            }
+            steps {
+                  git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME')
             }
        }
        stage ('Build') { //Compile stage
