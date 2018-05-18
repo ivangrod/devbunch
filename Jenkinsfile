@@ -39,6 +39,7 @@ pipeline {
                 expression { return !'$BRANCH_NAME'.startsWith('PR-') }
             }
             steps {
+                  echo 'Checkout $BRANCH_NAME'
                   git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME')
             }
        }
@@ -87,7 +88,7 @@ pipeline {
                 expression { BRANCH_NAME != 'master' }
             }
             steps {
-                echo 'Deploying' + env.BRANCH_NAME
+                echo 'Deploying ' + env.BRANCH_NAME
             }
       }
       stage ('Confirmation') {
