@@ -87,7 +87,7 @@ pipeline {
       }
       stage ('Checking PR commits') {
             when {
-                expression { BRANCH_NAME != 'master' }
+                expression { return env.BRANCH_NAME.startsWith('PR-') }
             }
             steps {
                 echo 'Deploying ' + env.BRANCH_NAME
