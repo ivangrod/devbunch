@@ -5,15 +5,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.devbunch.extractor.crawler.ICrawler;
 
-public class ExtractorFactoryMethod {
+import lombok.extern.slf4j.Slf4j;
 
-  private static final Logger logger = LoggerFactory.getLogger(ExtractorFactoryMethod.class);
+@Slf4j
+public class ExtractorFactoryMethod {
 
   public static ExtractorService getExtractor(final String origin, final String link,
       Optional<ICrawler> crawler) {
 
     if (crawler.isPresent()) {
-      logger.info("Feed external with origin [{}]", origin);
+      log.debug("Feed external with origin [{}]", origin);
       return new ExternalExtractorService(origin, link, crawler.get());
     }
 

@@ -73,7 +73,7 @@ pipeline {
                success {
                     junit 'collector/target/surefire-reports/**/*.xml' 
                     junit 'extractor/target/surefire-reports/**/*.xml' 
-                    junit 'model/target/surefire-reports/**/*.xml' 
+                    junit 'graph-model/target/surefire-reports/**/*.xml' 
                }
           }
       }
