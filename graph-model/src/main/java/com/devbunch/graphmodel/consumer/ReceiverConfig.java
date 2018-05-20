@@ -29,7 +29,7 @@ public class ReceiverConfig {
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-        new JsonDeserializer<>(FeedItem.class));
+        new JsonDeserializer<>(FeedItem.class).getClass());
     props.put(ConsumerConfig.GROUP_ID_CONFIG, "foo");
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
