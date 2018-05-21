@@ -53,6 +53,10 @@ We use [SemVer](http://semver.org/) for versioning.
 
 * **Iván Gutiérrez** - *Initial work* - [ivangrod](https://github.com/ivangrod)
 
+## Contributors
+
+* **David Romero** - *Development and CI* - [david-romero](https://github.com/david-romero)
+
 ## License
 
 This project is licensed under the GNU GENERAL PUBLIC LICENSE License - see the [LICENSE.md](LICENSE.md) file for details
