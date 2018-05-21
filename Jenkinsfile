@@ -26,21 +26,9 @@ pipeline {
                 deleteDir()
            }
        }
-       stage('Checkout PR') {
-            when {
-                expression { return env.BRANCH_NAME.startsWith('PR-') }
-            }
-            steps {
-                checkout scm
-            }
-       }
        stage('Checkout') {
-            when {
-                expression { return !env.BRANCH_NAME.startsWith('PR-') }
-            }
             steps {
-                  echo 'Checkout ' + env.BRANCH_NAME
-                  git(url: 'https://github.com/david-romero/devbunch', branch: '$BRANCH_NAME')
+                  checkout scm
             }
        }
        stage ('Build') { //Compile stage
@@ -79,18 +67,18 @@ pipeline {
       }
       stage ('Install') {
             when {
-              branch 'develop'
+              expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
             }
             steps {
                  sh "mvn clean install"
-           }
+            }
       }
       stage ('Checking PR commits') {
             when {
                 expression { return env.BRANCH_NAME.startsWith('PR-') }
             }
             steps {
-                echo 'Deploying ' + env.BRANCH_NAME
+                echo 'Review ' + env.BRANCH_NAME
             }
       }
       stage ('Confirmation') {

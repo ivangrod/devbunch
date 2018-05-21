@@ -41,8 +41,30 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<images>
+						<image>
+							<name>${project.groupId}-${project.artifactId}:${project.version}</name>
+							<alias>${project.groupId}-${project.artifactId}:${project.version}</alias>
+							<build>
+								<dockerFileDir>${project.basedir}/../</dockerFileDir>
+								<compression>gzip</compression>
+							</build>
+						</image>
+					</images>
+				</configuration>
+				<executions>
+					<execution>
+						<id>start</id>
+						<phase>install</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
