@@ -1,8 +1,7 @@
 package com.devbunch.extractor.crawler.service;
 
 import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 import com.devbunch.extractor.crawler.ICrawler;
 
 import lombok.extern.slf4j.Slf4j;
