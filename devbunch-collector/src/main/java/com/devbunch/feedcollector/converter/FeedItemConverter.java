@@ -1,8 +1,11 @@
 package com.devbunch.feedcollector.converter;
 
+import java.sql.Date;
 import java.time.Instant;
-import java.time.ZoneId;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.util.StringUtils;
 import com.devbunch.model.FeedItem;
@@ -24,12 +27,21 @@ public final class FeedItemConverter {
     builder.generatedId(md5FromString(entry.getLink()));
 
     if (Optional.ofNullable(entry.getPublishedDate()).isPresent()) {
-      builder.publicationTimestamp(
-          entry.getPublishedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+      builder.publicationTimestamp(entry.getPublishedDate());
     }
-    builder.collectTimestamp(Instant.now().atZone(ZoneId.systemDefault()).toLocalDateTime());
+    builder.collectTimestamp(Date.from(Instant.now()));
 
-    // TODO TOPICS & CONTENT
+    if (!CollectionUtils.isEmpty(entry.getContents())) {
+      StringBuilder strBuilder = new StringBuilder();
+      entry.getContents().forEach(content -> strBuilder.append(content.getValue()));
+      builder.content(strBuilder.toString());
+    }
+
+    if (!CollectionUtils.isEmpty(entry.getCategories())) {
+      Set<String> topicNameCollection = entry.getCategories().stream()
+          .map(syndCategory -> syndCategory.getName()).collect(Collectors.toSet());
+      builder.topics(topicNameCollection);
+    }
 
     return builder.build();
   }

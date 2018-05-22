@@ -7,7 +7,7 @@ spring:
       
 spring:
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 0.0.0.0:9092
 
 app:
-  topic: feed-item-extracted      
+  topic: feed-item-complete      

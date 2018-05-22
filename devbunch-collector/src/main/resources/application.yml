@@ -3,6 +3,11 @@ spring.kafka:
   producer:
     value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
     
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true    
+    
 feed-collector:
   sender:
     topicName: feed-item

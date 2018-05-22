@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.devbunch.feedcollector.processor.FeedItemProcessor;
 import com.devbunch.feedcollector.reader.FeedItemReader;
 import com.devbunch.feedcollector.writer.FeedItemSender;
 import com.devbunch.model.FeedItem;
@@ -32,9 +33,11 @@ public class BatchConfiguration {
   }
 
   @Bean
-  public Step step1(FeedItemReader reader, FeedItemSender sender) {
+  public Step step1(FeedItemReader reader, FeedItemProcessor feedItemProcessor,
+      FeedItemSender sender) {
     return stepBuilderFactory.get("step1").allowStartIfComplete(true)
-        .<Entry<String, SyndEntry>, FeedItem>chunk(10).reader(reader).writer(sender).build();
+        .<Entry<String, SyndEntry>, FeedItem>chunk(10).reader(reader).processor(feedItemProcessor)
+        .writer(sender).build();
   }
   // end::jobstep[]
 }

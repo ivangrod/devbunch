@@ -1,7 +1,7 @@
 package com.devbunch.model;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,9 +28,9 @@ public class FeedItem implements Serializable {
 
   private String content;
 
-  private LocalDateTime collectTimestamp;
+  private Date collectTimestamp;
 
-  private LocalDateTime publicationTimestamp;
+  private Date publicationTimestamp;
 
   private Set<String> topics;
 }

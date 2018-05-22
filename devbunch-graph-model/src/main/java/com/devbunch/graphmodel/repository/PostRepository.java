@@ -7,7 +7,7 @@ import com.devbunch.graphmodel.domain.Post;
 
 public interface PostRepository extends Neo4jRepository<Post, Long> {
 
-  Optional<Post> findByGenerateId(String generateId);
+  Optional<Post> findByGeneratedId(String generatedId);
 
   Collection<Post> findByOriginIgnoreCase(String origin);
 }

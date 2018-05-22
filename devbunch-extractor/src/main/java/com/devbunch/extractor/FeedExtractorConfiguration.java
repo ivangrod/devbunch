@@ -37,6 +37,7 @@ public class FeedExtractorConfiguration {
   @Autowired
   private CrawlerConfig crawlerConfig;
 
+  @SuppressWarnings("resource")
   @Bean(name = KafkaStreamsDefaultConfiguration.DEFAULT_STREAMS_CONFIG_BEAN_NAME)
   public StreamsConfig kStreamsConfigs() {
     Map<String, Object> props = new HashMap<>();
@@ -57,9 +58,9 @@ public class FeedExtractorConfiguration {
         Consumed.with(Serdes.String(), new JsonSerde<>(FeedItem.class)));
 
     KStream<String, FeedItem> feedItemExtractedStream =
-        feedItemStream.transformValues(new FeedItemExtractor(), "feed-item-state-store");
+        feedItemStream.transformValues(new FeedItemExtractor());
 
-    feedItemExtractedStream.to("feed-item-extracted",
+    feedItemExtractedStream.to("feed-item-complete",
         Produced.with(Serdes.String(), new JsonSerde<>(FeedItem.class)));
 
     return feedItemStream;
@@ -81,8 +82,10 @@ public class FeedExtractorConfiguration {
           ExtractorService customExtractor = ExtractorFactoryMethod.getExtractor(originFeed,
               feedItemToExtract.getUri(), Optional.ofNullable(crawlerConfig.crawler(originFeed)));
 
-          feedItemToExtract.setContent(customExtractor.extractContent());
-          feedItemToExtract.setTopics(customExtractor.extractTopics());
+          if (customExtractor != null) {
+            feedItemToExtract.setContent(customExtractor.extractContent());
+            feedItemToExtract.setTopics(customExtractor.extractTopics());
+          }
 
           return feedItemToExtract;
         }
