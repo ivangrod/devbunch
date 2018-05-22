@@ -4,6 +4,12 @@ FROM jenkins/jenkins
 MAINTAINER David Romero (davromalc@gmail.com)
 MAINTAINER Iván Gutiérrez (ivangutrod@gmail.com)
 
+USER root
+RUN apt-get update \
+      && apt-get install -y sudo \
+      && rm -rf /var/lib/apt/lists/*
+RUN echo "jenkins ALL=NOPASSWD: ALL" >> /etc/sudoers
+
 COPY jdk-8u171-linux-x64.tar.gz /var/jenkins_home/downloads/
 COPY apache-maven-3.5.0-bin.tar.gz /var/jenkins_home/downloads/
 

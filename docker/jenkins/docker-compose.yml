@@ -11,6 +11,8 @@ services:
     environment:
       - JENKINS_USER=admin
       - JENKINS_PASS=admin
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock #Enable to use docker in docker container
 #    links:
 #      - sonarqube
 #      - artifactory
