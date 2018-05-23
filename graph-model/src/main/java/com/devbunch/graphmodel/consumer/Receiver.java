@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
+
 import com.devbunch.graphmodel.domain.Post;
 import com.devbunch.graphmodel.service.PostService;
 import com.devbunch.model.FeedItem;
+
 import ma.glasnost.orika.MapperFacade;
 
 @Service
