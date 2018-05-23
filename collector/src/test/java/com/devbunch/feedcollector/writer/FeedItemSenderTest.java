@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
+import org.assertj.core.util.Arrays;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.BDDMockito;
@@ -24,6 +25,7 @@ public class FeedItemSenderTest {
 	@Mock
 	private KafkaTemplate<String, FeedItem> kafkaTemplate;
 	
+	
 	@InjectMocks
 	private FeedItemSender feedItemSender;
 
@@ -36,8 +38,9 @@ public class FeedItemSenderTest {
 		RecordMetadata recordMetadata = null;
 		SendResult<String, FeedItem> result = new SendResult<>(producerRecord, recordMetadata);
 		ListenableFuture<SendResult<String, FeedItem>> future = new AsyncResult<>(result);
-		BDDMockito.given(kafkaTemplate.send(BDDMockito.anyString(), BDDMockito.any(FeedItem.class))).willReturn(future);
-		List<? extends FeedItem> feedItems = new ArrayList<>();
+		BDDMockito.given(kafkaTemplate.send(BDDMockito.eq(null), BDDMockito.eq(feed))).willReturn(future);
+		List<FeedItem> feedItems = new ArrayList<>();
+		feedItems.add(feed);
 		
 		// when
 		feedItemSender.write(feedItems);
