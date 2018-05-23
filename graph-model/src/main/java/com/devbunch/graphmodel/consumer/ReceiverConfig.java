@@ -27,23 +27,22 @@ public class ReceiverConfig {
   public Map<String, Object> consumerConfigs() {
     Map<String, Object> props = new HashMap<>();
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
-    props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-    props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
-        new JsonDeserializer<>(FeedItem.class).getClass());
-    props.put(ConsumerConfig.GROUP_ID_CONFIG, "foo");
+    props.put(ConsumerConfig.GROUP_ID_CONFIG, "feed-graph");
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
     return props;
   }
 
   @Bean
-  public ConsumerFactory<String, String> consumerFactory() {
-    return new DefaultKafkaConsumerFactory<>(consumerConfigs());
+  public ConsumerFactory<String, FeedItem> consumerFactory() {
+    JsonDeserializer<FeedItem> jsonDeserializer = new JsonDeserializer<>(FeedItem.class);
+    return new DefaultKafkaConsumerFactory<>(consumerConfigs(), new StringDeserializer(),
+        jsonDeserializer);
   }
 
   @Bean
-  public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, String>> kafkaListenerContainerFactory() {
-    ConcurrentKafkaListenerContainerFactory<String, String> factory =
+  public KafkaListenerContainerFactory<ConcurrentMessageListenerContainer<String, FeedItem>> kafkaListenerContainerFactory() {
+    ConcurrentKafkaListenerContainerFactory<String, FeedItem> factory =
         new ConcurrentKafkaListenerContainerFactory<>();
     factory.setConsumerFactory(consumerFactory());
     return factory;
