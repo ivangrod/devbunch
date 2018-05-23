@@ -1,0 +1,4 @@
+target/docker/**
+collector/target/docker/**
+extractor/target/docker/**
+graph-model/target/docker/**
