@@ -12,8 +12,6 @@ pipeline {
         //Project name
         APP_NAME = 'devbunch'
         CURRENT_BRACH = '$BRANCH_NAME'
-        DOCKER_HUB_USER     = credentials('DOCKER_HUB_USER')
-        DOCKER_HUB_PASS = credentials('DOCKER_HUB_PASS')
     }
     stages { //Stages definition
        stage ('Initialize') { //Send message to slack at the beginning
