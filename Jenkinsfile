@@ -70,7 +70,7 @@ pipeline {
               expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
             }
             steps {
-                sh "mvn clean deploy -Ddocker.username=$DOCKER_HUB_USER -Ddocker.password=$DOCKER_HUB_PASS -DskipTests=true"
+                sh "mvn clean deploy -Ddocker.username=${env.DOCKER_HUB_USER} -Ddocker.password=${env.DOCKER_HUB_PASS} -DskipTests=true"
             }
       }
       stage ('Checking PR commits') {
