@@ -12,6 +12,8 @@ pipeline {
         //Project name
         APP_NAME = 'devbunch'
         CURRENT_BRACH = '$BRANCH_NAME'
+        DOCKER_HUB_USER     = credentials('DOCKER_HUB_USER')
+        DOCKER_HUB_PASS = credentials('DOCKER_HUB_PASS')
     }
     stages { //Stages definition
        stage ('Initialize') { //Send message to slack at the beginning
@@ -31,7 +33,7 @@ pipeline {
                   checkout scm
             }
        }
-       stage ('Build') { //Compile stage
+       stage ('Compile') { //Compile stage
             steps {
                  sh "mvn -T 4 -B --batch-mode -V -U clean compile"
             }
@@ -65,28 +67,12 @@ pipeline {
                }
           }
       }
-      stage ('Install') {
-            when {
-              expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
-            }
-            steps {
-                 sh "mvn clean install"
-            }
-      }
-      stage ('Push Artifacts') {
-            when {
-              expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
-            }
-            steps {
-                sh "mvn clean deploy"
-            }
-      }
       stage ('Deploy') {
             when {
               expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
             }
             steps {
-                 sh "mvn --version" //TODO
+                sh "mvn clean deploy -Ddocker.username=$DOCKER_HUB_USER -Ddocker.password=$DOCKER_HUB_PASS -DskipTests=true"
             }
       }
       stage ('Checking PR commits') {
