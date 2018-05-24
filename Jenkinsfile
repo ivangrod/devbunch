@@ -73,6 +73,22 @@ pipeline {
                  sh "mvn clean install"
             }
       }
+      stage ('Push Artifacts') {
+            when {
+              expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
+            }
+            steps {
+                sh "mvn clean deploy"
+            }
+      }
+      stage ('Deploy') {
+            when {
+              expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
+            }
+            steps {
+                 sh "mvn --version" //TODO
+            }
+      }
       stage ('Checking PR commits') {
             when {
                 expression { return env.BRANCH_NAME.startsWith('PR-') }
@@ -120,6 +136,16 @@ pipeline {
                 }
            }
       }
+      stage ('Check Deployment') {
+            when {
+              expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
+            }
+            steps {
+                retry(10) {
+                  sh "curl http://www.google.com"
+                }
+            }
+      }
     } //End of stages
     //Post-workflow actions.
     //The pipeline sends messages with the result of the execution
@@ -137,4 +163,10 @@ pipeline {
            sh 'mvn --version'
       }
     }
+}
+
+
+def getPomVersion() {
+    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+    matcher ? matcher[0][1] : null
 }
