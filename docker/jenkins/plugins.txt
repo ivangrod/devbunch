@@ -109,7 +109,7 @@ workflow-cps:latest
 workflow-cps-global-lib:latest
 workflow-durable-task-step:2.19
 workflow-job:latest
-workflow-multibranch:2.18
+workflow-multibranch:2.19
 workflow-scm-step:latest
 workflow-step-api:latest
 workflow-support:latest
