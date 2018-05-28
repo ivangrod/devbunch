@@ -1,1 +1,0 @@
-INSERT INTO external_extractor_data (id,origin,selector_content,selector_categories) VALUES (1,'ATLASSIAN','.blog > .aui-page-panel-inner > *:not(.latest-blogs, .signup-container, .comments)','header.blog a[href*=categories]');

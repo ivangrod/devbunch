@@ -1,0 +1,3 @@
+[submodule "docker/confluentinc/kafka-connect-elasticsearch"]
+	path = docker/confluentinc/kafka-connect-elasticsearch
+	url = git@github.com:ivangrod/kafka-connect-elasticsearch.git
