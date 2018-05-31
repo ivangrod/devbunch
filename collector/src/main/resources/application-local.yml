@@ -1,0 +1,15 @@
+spring.kafka:
+  bootstrap-servers: 0.0.0.0:9092
+  producer:
+    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    
+spring:
+  jackson:
+    serialization:
+      write-dates-as-timestamps: true    
+  batch.job.enabled: false   
+    
+feed-collector:
+  cron: 0 0/3 * * * ?
+  sender:
+    topicName: feed-item
