@@ -1,12 +1,23 @@
 package com.devbunch.extractor;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.core.env.StandardEnvironment;
 
 @SpringBootApplication
 public class FeedExtractorApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(FeedExtractorApplication.class, args);
-  }
+	private static final String DEFAULT_ENVIRONMENT = "local";
+
+	public static void main(String[] args) {
+		new SpringApplicationBuilder(FeedExtractorApplication.class).environment(new StandardEnvironment() {
+
+			@Override
+			public String[] getActiveProfiles() {
+				final String systemEnvironmentVar = System.getenv("ENV");
+				final String environmentStr = systemEnvironmentVar == null ? DEFAULT_ENVIRONMENT : systemEnvironmentVar;
+				return new String[] { environmentStr };
+			}
+		}).run(args);
+	}
 }
