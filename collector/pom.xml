@@ -81,7 +81,7 @@
 				<configuration>
 					<images>
 						<image>
-							<name>${project.groupId}-${project.artifactId}:${project.version}</name>
+							<name>%g/%a:${project.version}</name>
 							<alias>${project.groupId}-${project.artifactId}:${project.version}</alias>
 							<build>
 								<dockerFileDir>${project.basedir}/../</dockerFileDir>
@@ -97,6 +97,19 @@
 						<goals>
 							<goal>build</goal>
 						</goals>
+					</execution>
+					<execution>
+						<id>tag-image-latest</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>push</goal>
+						</goals>
+						<configuration>
+							<name>%g/%a:${project.version}</name>
+							<newName>docker.io/%g/%a:${project.version}</newName>
+							<serverId>docker-hub</serverId>
+							<pushImage>true</pushImage>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

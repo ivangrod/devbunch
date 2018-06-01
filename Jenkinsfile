@@ -31,7 +31,7 @@ pipeline {
                   checkout scm
             }
        }
-       stage ('Build') { //Compile stage
+       stage ('Compile') { //Compile stage
             steps {
                  sh "mvn -T 4 -B --batch-mode -V -U clean compile"
             }
@@ -65,12 +65,14 @@ pipeline {
                }
           }
       }
-      stage ('Install') {
+      stage ('Deploy') {
             when {
               expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
             }
             steps {
-                 sh "mvn clean install"
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                  sh "mvn clean deploy -Ddocker.username=$USERNAME -Ddocker.password=$PASSWORD -DskipTests=true"
+                }
             }
       }
       stage ('Checking PR commits') {
@@ -120,6 +122,16 @@ pipeline {
                 }
            }
       }
+      stage ('Check Deployment') {
+            when {
+              expression { return env.BRANCH_NAME.equals('develop')  || env.BRANCH_NAME.equals('master')  }
+            }
+            steps {
+                retry(10) {
+                  sh "curl http://www.google.com"
+                }
+            }
+      }
     } //End of stages
     //Post-workflow actions.
     //The pipeline sends messages with the result of the execution
@@ -137,4 +149,10 @@ pipeline {
            sh 'mvn --version'
       }
     }
+}
+
+
+def getPomVersion() {
+    def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
+    matcher ? matcher[0][1] : null
 }
