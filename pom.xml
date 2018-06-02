@@ -3,8 +3,8 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.devbunch</groupId>
-	<artifactId>main</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>parent</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<parent>
