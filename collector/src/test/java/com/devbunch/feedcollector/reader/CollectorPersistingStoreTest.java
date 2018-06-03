@@ -45,12 +45,12 @@ public class CollectorPersistingStoreTest {
 	public void validateCollectorPersistingCheckWasStoredWhenPublishedDateIsBeforeOrEqual() throws Exception {
 
 		final String origin = "foo";
-		final Date publicationTimestamp = Date.from(Instant.now());
 
 		CollectorPersistingStore collectorStore = CollectorPersistingStore.getInstance();
-		collectorStore.storeEntryInfo(origin, publicationTimestamp);
+		collectorStore.storeEntryInfo(origin, Date.from(Instant.now()));
 		collectorStore.flush();
 
-		assertFalse(collectorStore.checkEntryInfoWasStored(origin, publicationTimestamp));
+		assertFalse(
+				collectorStore.checkEntryInfoWasStored(origin, Date.from(Instant.now().plus(10, ChronoUnit.MINUTES))));
 	}
 }
