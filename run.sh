@@ -3,7 +3,10 @@ if [ -e docker/connect-plugins/connect-plugins/kafka-connect-elasticsearch-4.1.0
 then
     echo "kafka-connect-elasticsearch.jar is already located" 
 else
-    echo "nok"
+    cd docker/confluentinc/kafka-connect-elasticsearch
+    mvn clean package -P standalone
+    cp target/kafka-connect-elasticsearch-4.1.0-standalone.jar ../../connect-plugins/connect-plugins/kafka-connect-elasticsearch-4.1.0-standalone.jar
+    cd ../../..
 fi
 cd docker
 docker-compose down
