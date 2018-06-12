@@ -16,6 +16,8 @@
 
 	<properties>
 		<jsoup.version>1.9.2</jsoup.version>
+		<!-- The main class to start by executing "java -jar" -->
+		<start-class>com.devbunch.extractor.FeedExtractorApplication</start-class>
 	</properties>
 
 	<dependencies>
@@ -109,6 +111,10 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
