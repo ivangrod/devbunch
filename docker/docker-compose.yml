@@ -1,35 +1,5 @@
-version: '2'
+version: '3.1'
 services:
-
-  #############
-  # PostgreSQL
-  #############
-  # postgres:
-  #   image: postgres
-  #   ports:
-  #    - "5432:5432"
-  #   environment:
-  #    - POSTGRES_PASSWORD=password
-  #    - POSTGRES_USER=postgres
-  #    - POSTGRES_DB=devbunch_db
-  #   networks:
-  #     - postgres
-  #   volumes:
-  #     - /usr/share/postgresql/data:/var/lib/postgresql/data
-  #   restart: unless-stopped
-
-  # pgadmin:
-  #   links:
-  #     - postgres:postgres
-  #   image: dpage/pgadmin4
-  #   ports:
-  #     - "80:80"
-  #   environment:
-  #    - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-  #    - PGADMIN_DEFAULT_PASSWORD=password
-  #   networks:
-  #     - postgres
-  #   restart: unless-stopped
 
   #############
   # ELK
@@ -46,7 +16,6 @@ services:
       memlock:
         soft: -1
         hard: -1
-    mem_limit: 1g
     volumes:
       - ./elastic/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
       - elastic-data:/usr/share/elasticsearch/data
@@ -54,9 +23,15 @@ services:
       - 9200:9200
     networks:
       - elk
+    healthcheck:
+        test: ["CMD-SHELL", "curl --silent --fail localhost:9200/_cluster/health || exit 1"]
+        interval: 30s
+        timeout: 30s
+        retries: 3
 
   kibana:
     image: docker.elastic.co/kibana/kibana:6.1.4
+    container_name: kibana
     volumes:
       - ./kibana/config/kibana.yml:/usr/share/kibana/config/kibana.yml
     ports:
@@ -65,32 +40,52 @@ services:
       - elk
     depends_on:
       - elasticsearch
+    healthcheck:
+      test: curl -f -o /tmp/kibana.txt localhost:5601/app/kibana || exit 1
+      interval: 30s
+      timeout: 90s
+      retries: 3
+
+      
 
   #############
   # Neo4j
   #############
   neo4j:
     image: neo4j:3.4.0
+    container_name: neo4j
     ports:
       - "7474:7474"
       - "7687:7687"
     environment:
       NEO4J_AUTH: "none"
+    healthcheck:
+      test: ["CMD-SHELL", "neo4j status | exit 0"]
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
   #############
   # Kafka
   #############
   zookeeper:
     image: confluentinc/cp-zookeeper
+    container_name: zookeeper
     network_mode: host
     ports:
       - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+      test: ["CMD-SHELL", "echo ruok | nc -w 2 localhost 2181"]
+      interval: 45s
+      timeout: 10s
+      retries: 3
 
   kafka:
     image: confluentinc/cp-kafka
+    container_name: kafka
     network_mode: host
     depends_on:
       - zookeeper
@@ -101,9 +96,15 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: localhost:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --list --zookeeper localhost:2181 || exit 1" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
 
   connect:
     image: confluentinc/cp-kafka-connect
+    container_name: kafka-connect
     network_mode: host
     ports:
       - "8083:8083"
@@ -135,7 +136,12 @@ services:
       CONNECT_PLUGIN_PATH: /connect-plugins
       CONNECT_LOG4J_ROOT_LOGLEVEL: INFO
       CONNECT_LOG4J_LOGGERS: org.reflections=ERROR
-      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-3.3.0.jar  
+      CLASSPATH: /usr/share/java/monitoring-interceptors/monitoring-interceptors-3.3.0.jar
+    healthcheck:
+      test: "curl --silent -f --header 'Content-Type: application/json' --request GET http://localhost:8083/connectors || exit 1"
+      interval: 30s
+      timeout: 30s
+      retries: 3
 
 networks:
 # postgres:
