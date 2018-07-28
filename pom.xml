@@ -26,6 +26,7 @@
 		<module>collector</module>
 		<module>extractor</module>
 		<module>graph-model</module>
+		<module>search-api</module>
 	</modules>
 
 	<dependencies>

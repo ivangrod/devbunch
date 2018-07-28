@@ -18,7 +18,7 @@
 
 
 	<properties>
-		<rome.version>1.9.0</rome.version>
+		<rome.version>1.11.0</rome.version>
 	</properties>
 
 	<dependencies>
