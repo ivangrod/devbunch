@@ -28,7 +28,7 @@ class SearchController {
 		System.out.println("You want to seach: $term")
 
 		val searchSourceBuilder = SearchSourceBuilder()
-		searchSourceBuilder.query(QueryBuilders.disMaxQuery().add(QueryBuilders.termQuery("topics", term)).add(QueryBuilders.termQuery("title", term)))
+		searchSourceBuilder.query(QueryBuilders.disMaxQuery().add(QueryBuilders.termQuery("topics", term)).add(QueryBuilders.termQuery("title", term)).tieBreaker(0.3f))
 
 		val search: Search.Builder = Search.Builder(searchSourceBuilder.toString())
 		if (indexName != null) search.addIndex(indexName)
