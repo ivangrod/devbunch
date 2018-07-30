@@ -15,12 +15,13 @@ docker-compose up --build -d
 
 function checkContainerIsHealthy(){
 	while [ true ]; do
-        if [ $(docker inspect --format="{{ .State.Health.Status }}" $1) == "healthy" ]; then
+        if [ $(docker inspect --format="{{json .State.Health.Status }}" "$1") == "healthy" ]; then
                 echo "$1 is healthy. :D"
                 break
         else
                 echo "$1 is not healthy. Sleep for 5 second"
                 sleep 5
+                break
         fi
 	done
 }
@@ -75,7 +76,3 @@ else
 fi
 
 exit 0
-
-
-
-

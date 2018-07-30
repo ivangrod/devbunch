@@ -18,7 +18,7 @@
 
 
 	<properties>
-		<rome.version>1.9.0</rome.version>
+		<rome.version>1.11.0</rome.version>
 		<!-- The main class to start by executing "java -jar" -->
 		<start-class>com.devbunch.feedcollector.FeedCollectorApplication</start-class>
 	</properties>
