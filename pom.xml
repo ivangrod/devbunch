@@ -26,6 +26,7 @@
 		<module>collector</module>
 		<module>extractor</module>
 		<module>graph-model</module>
+		<module>search-api</module>
 	</modules>
 
 	<dependencies>
@@ -54,14 +55,6 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>2.21.0</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-jar-plugin</artifactId>
-					<version>2.3.1</version>
-					<!--<configuration>
-						<outputDirectory>${project.build.directory}/../../target/</outputDirectory>
-					</configuration>-->
 				</plugin>
 				<plugin>
 				  <groupId>org.apache.maven.plugins</groupId>

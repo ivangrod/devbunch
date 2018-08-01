@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<opml version="1.0">
+  <head>
+    <title>Engineering Blogs</title>
+  </head>
+  <body>
+    <outline text="Engineering Blogs" title="Engineering Blogs">
+      <outline type="rss" text="AirPair" title="AirPair" xmlUrl="https://www.airpair.com/rss" htmlUrl="https://www.airpair.com/software-experts"/>
+    </outline>
+  </body>
+</opml>

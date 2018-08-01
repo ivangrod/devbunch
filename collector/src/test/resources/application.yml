@@ -10,6 +10,6 @@ spring:
   batch.job.enabled: false   
     
 feed-collector:
-  cron: 0 0/1 * * * ?
+  cron: 0 0/3 * * * ?
   sender:
     topicName: feed-item
