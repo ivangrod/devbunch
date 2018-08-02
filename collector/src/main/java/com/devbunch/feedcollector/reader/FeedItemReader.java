@@ -4,7 +4,7 @@ import static java.util.Comparator.naturalOrder;
 import static java.util.Comparator.nullsLast;
 
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.AbstractMap;
 import java.util.Collections;
 import java.util.Comparator;
@@ -17,6 +17,11 @@ import java.util.stream.Collectors;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.item.adapter.ItemReaderAdapter;
@@ -117,9 +122,14 @@ public class FeedItemReader extends ItemReaderAdapter<Entry<String, SyndEntry>> 
 	private Entry<String, SyndFeed> buildOriginAndFeedPair(final String origin, final String feedUrl) {
 
 		SyndFeed feed = null;
-		try {
-			SyndFeedInput input = new SyndFeedInput();
-			feed = input.build(new XmlReader(new URL(feedUrl)));
+
+		try (CloseableHttpClient client = HttpClients.createDefault()) {
+			HttpUriRequest request = new HttpGet(feedUrl);
+			try (CloseableHttpResponse response = client.execute(request);
+					InputStream stream = response.getEntity().getContent()) {
+				SyndFeedInput input = new SyndFeedInput();
+				feed = input.build(new XmlReader(stream));
+			}
 		} catch (IllegalArgumentException | FeedException | IOException exc) {
 			logger.error("Url of feed [{}]", feedUrl);
 			logger.error("An error has been produced while opml was processed.", exc);
