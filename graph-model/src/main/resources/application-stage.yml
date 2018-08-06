@@ -7,6 +7,13 @@ spring:
   kafka:
     bootstrap-servers: 0.0.0.0:9092
       
+      
+management:
+   endpoints:
+      enabled-by-default: true
+      web:
+         exposure:
+            include: '*'
 
 app:
   topic: feed-item-complete      

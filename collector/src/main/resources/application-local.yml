@@ -8,6 +8,14 @@ spring:
     serialization:
       write-dates-as-timestamps: true    
   batch.job.enabled: false   
+  
+  
+management:
+   endpoints:
+      enabled-by-default: true
+      web:
+         exposure:
+            include: '*'
     
 feed-collector:
   cron: 0 0/1 * * * ?

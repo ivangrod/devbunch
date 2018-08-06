@@ -1,8 +1,16 @@
 spring.kafka:
-  bootstrap-servers: 0.0.0.0:9092
+  bootstrap-servers: apache-kafka:9092
 
 spring.jackson:
-  serialization.write-dates-as-timestamps: true 
+  serialization.write-dates-as-timestamps: true
+  
+  
+management:
+   endpoints:
+      enabled-by-default: true
+      web:
+         exposure:
+            include: '*' 
   
 spring:
   datasource:
