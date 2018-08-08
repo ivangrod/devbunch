@@ -7,9 +7,16 @@ spring:
   jackson:
     serialization:
       write-dates-as-timestamps: true    
-  batch.job.enabled: false   
+  batch.job.enabled: false 
+  
+management:
+   endpoints:
+      enabled-by-default: true
+      web:
+         exposure:
+            include: '*'  
     
 feed-collector:
-  cron: 0 0 1 * * ?
+  cron: 0 0/15 * * * ?
   sender:
     topicName: feed-item

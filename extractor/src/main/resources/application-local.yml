@@ -4,6 +4,15 @@ spring.kafka:
 spring.jackson:
   serialization.write-dates-as-timestamps: true 
   
+  
+  
+management:
+   endpoints:
+      enabled-by-default: true
+      web:
+         exposure:
+            include: '*'
+  
 spring:
   datasource:
     initialization-mode: always
