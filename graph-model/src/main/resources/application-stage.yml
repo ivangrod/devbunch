@@ -1,11 +1,11 @@
 spring:
   data:
     neo4j:
-      uri: bolt://localhost
+      uri: bolt://neo4j
       username: neo4j
       password: secret
   kafka:
-    bootstrap-servers: 0.0.0.0:9092
+    bootstrap-servers: apache-kafka:9092
       
       
 management:
