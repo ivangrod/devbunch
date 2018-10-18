@@ -1,0 +1,3 @@
+jest.elasticsearch:
+  url: http://elasticsearch:9200
+  index: feed-item-complete

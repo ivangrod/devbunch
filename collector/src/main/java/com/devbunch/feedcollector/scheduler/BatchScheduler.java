@@ -27,12 +27,11 @@ public class BatchScheduler {
 
 		log.info("Job [{}] Started", job.getName());
 
-		final JobParameters param = new JobParametersBuilder().addLong("JobID", System.nanoTime())
-				.toJobParameters();
+		final JobParameters param = new JobParametersBuilder().addLong("JobID", System.nanoTime()).toJobParameters();
 
 		final JobExecution execution = jobLauncher.run(job, param);
 
-		log.info("Job [{}] finished with status : {}", job.getName() , execution.getStatus());
+		log.info("Job [{}] finished with status : {}", job.getName(), execution.getStatus());
 	}
 
 }

@@ -55,8 +55,7 @@ public class BatchConfiguration {
 	}
 
 	@Bean
-	public FactoryBean<JobRepository> mapJobRepositoryFactory(PlatformTransactionManager txManager)
-			throws Exception {
+	public FactoryBean<JobRepository> mapJobRepositoryFactory(PlatformTransactionManager txManager) throws Exception {
 		MapJobRepositoryFactoryBean factory = new MapJobRepositoryFactoryBean(txManager);
 		factory.afterPropertiesSet();
 		return factory;
